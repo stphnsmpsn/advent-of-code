@@ -10,4 +10,6 @@ pub enum AocError {
     OverflowError(String),
     #[error("Invalid Input: `{0}`")]
     InputError(String),
+    #[error("Error: `{0}`")]
+    GenericError(String),
 }
