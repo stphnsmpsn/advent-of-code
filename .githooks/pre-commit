@@ -1,0 +1,9 @@
+#!/bin/bash
+
+main() {
+    echo "Running Pre-Push Hooks"
+    if [[ "$(git branch --show-current)" == "main" ]]; then exit 1 "$msg"; fi
+
+}
+
+main

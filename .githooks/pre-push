@@ -1,0 +1,22 @@
+#!/bin/bash
+
+SUCCESS=0
+FAILURE=1
+
+main() {
+    echo "Running Pre-Commit Hooks"
+    cargo clippy --all --all-targets --all-features -- -Dwarnings -Drust-2018-idioms -Ddeprecated > /dev/null 2>&1;
+    if [[ "$?" -ne $SUCCESS ]]; then
+      echo "Clippy Failed"
+      exit $FAILURE;
+    fi
+    cargo fmt -- --check > /dev/null 2>&1
+    if [[ "$?" -ne $SUCCESS ]]; then
+      echo "Cargo Format Failed"
+      exit $FAILURE;
+    fi
+    echo "All Checks Passed. Committing..."
+    exit $SUCCESS
+}
+
+main

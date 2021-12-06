@@ -1,0 +1,10 @@
+[package]
+name = "common"
+version = "0.1.0"
+authors = ["Steve Sampson <mail@stephensampson.dev>"]
+edition = "2018"
+
+# See more keys and ther definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+thiserror = "1.0.30"
