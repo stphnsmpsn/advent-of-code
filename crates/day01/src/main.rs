@@ -37,10 +37,10 @@ fn part_one(path: &Path) -> Result<u32, AocError> {
 fn part_two(path: &Path) -> Result<u32, AocError> {
     let file = File::open(path)?;
 
-    let v: Vec<u32> = BufReader::new(file)
+    let v = BufReader::new(file)
         .lines()
-        .map(|n| n.unwrap().parse::<u32>().unwrap())
-        .collect();
+        .map(|n| Ok(n?.parse::<u32>()?))
+        .collect::<Result<Vec<u32>, AocError>>()?;
 
     let iter = v.windows(SLIDING_WINDOW_SIZE);
     rate_of_depth_increase(iter)

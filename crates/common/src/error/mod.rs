@@ -12,4 +12,6 @@ pub enum AocError {
     InputError(String),
     #[error("Error: `{0}`")]
     GenericError(String),
+    #[error("Invalid index (out of bounds)")]
+    IndexError,
 }

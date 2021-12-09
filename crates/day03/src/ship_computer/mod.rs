@@ -84,19 +84,7 @@ impl ShipComputer {
         let num_positions = self.bit_accumulator.len();
         let mut remaining = self.diagnostic_repo.retrieve(0, u32::MAX)?;
 
-        for i in 0..num_positions {
-            if remaining.len() == 1 {
-                break;
-            }
-            remaining = remaining
-                .iter()
-                .cloned()
-                .filter(|e| {
-                    let x = common_char_in_position(&remaining, i, Commonality::Least).unwrap();
-                    e.char_at_bit(i).unwrap() == x
-                })
-                .collect();
-        }
+        remaining = filter_remaining(remaining, num_positions, Commonality::Least)?;
 
         Ok(u32::from_str_radix(
             remaining[0].bits.iter().collect::<String>().as_str(),
@@ -108,23 +96,37 @@ impl ShipComputer {
         let num_positions = self.bit_accumulator.len();
         let mut remaining = self.diagnostic_repo.retrieve(0, u32::MAX)?;
 
-        for i in 0..num_positions {
-            if remaining.len() == 1 {
-                break;
-            }
-            remaining = remaining
-                .iter()
-                .cloned()
-                .filter(|e| {
-                    let x = common_char_in_position(&remaining, i, Commonality::Most).unwrap();
-                    e.char_at_bit(i).unwrap() == x
-                })
-                .collect();
-        }
+        remaining = filter_remaining(remaining, num_positions, Commonality::Most)?;
 
         Ok(u32::from_str_radix(
             remaining[0].bits.iter().collect::<String>().as_str(),
             2,
         )?)
     }
+}
+
+fn filter_remaining(
+    mut remaining: Vec<DiagnosticEntry>,
+    num_positions: usize,
+    commonality: Commonality,
+) -> Result<Vec<DiagnosticEntry>, AocError> {
+    for i in 0..num_positions {
+        if remaining.len() == 1 {
+            break;
+        }
+
+        remaining = remaining
+            .iter()
+            .cloned()
+            .filter_map(|e| {
+                let x = common_char_in_position(&remaining, i, commonality).ok()?;
+                match e.char_at_bit(i).ok()? == x {
+                    true => Some(e),
+                    false => None,
+                }
+            })
+            .collect();
+    }
+
+    Ok(remaining)
 }

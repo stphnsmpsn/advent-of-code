@@ -15,7 +15,7 @@ pub fn common_char_in_position(
     pos: usize,
     commonality: Commonality,
 ) -> Result<char, AocError> {
-    let num_bits = vec.get(0).unwrap().len();
+    let num_bits = vec.get(0).ok_or_else(|| AocError::IndexError)?.len();
     let mut bit_accumulator: Vec<(u32, u32)> = vec![(0, 0); num_bits];
 
     for v in vec {
