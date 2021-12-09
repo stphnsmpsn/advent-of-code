@@ -25,13 +25,13 @@ pub fn main() -> Result<(), AocError> {
     let start = Utc::now();
     info!(
         "The answer to part one is: {:?} (took: {}).",
-        part_one(&args.input_file)?.ok_or_else(|| AocError::EmptyOption)?,
+        part_one(&args.input_file)?.ok_or(AocError::EmptyOption)?,
         Utc::now().signed_duration_since(start)
     );
 
     info!(
         "The answer to part two is: {:?} (took: {}).",
-        part_two(&args.input_file)?.ok_or_else(|| AocError::EmptyOption)?,
+        part_two(&args.input_file)?.ok_or(AocError::EmptyOption)?,
         Utc::now().signed_duration_since(start)
     );
 
